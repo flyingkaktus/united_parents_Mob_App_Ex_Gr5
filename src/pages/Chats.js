@@ -1,22 +1,11 @@
 import React from "react";
 
-
-function createChatElements() 
-{
-   
-        <div class="ContainerChat" id="container">
-        <h2>Person</h2>
-    </div>
-    
-}
-
 function Chats() {
-   
     return (
-       <h2>Hello</h2>
+        <div>
+            <h1>Chats</h1>
+        </div>
     );
-    
 }
-
 
 export default Chats;

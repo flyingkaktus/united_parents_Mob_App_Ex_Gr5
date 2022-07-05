@@ -275,88 +275,10 @@ header {
 
 }
 
-#container 
-{
-  margin-top: 20px;
-  border: 3px solid gray;
-  padding: 50px;
-  width: 1000px;
-  position: relative;
-  background: white;
-}
+
 
   
-button {
-  -webkit-appearance: button;
-  -webkit-writing-mode: horizontal-tb !important;
-  text-rendering: auto;
-  color: buttontext;
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-transform: none;
-  text-indent: 0px;
-  text-shadow: none;
-  display: inline-block;
-  text-align: center;
-  align-items: flex-start;
-  cursor: default;
-  background-color: buttonface;
-  box-sizing: border-box;
-  margin: 0em;
-  font: 400 11px system-ui;
-  padding: 1px 7px 2px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
-  border-image: initial;
-}
 
 
-
-.btn {
-  width: 180px;
-  height: 60px;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid #91C9FF;
-  outline: none;
-  transition: 1s ease-in-out;
-}
-
-svg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  fill: none;
-  stroke: #fff;
-  stroke-dasharray: 150 480;
-  stroke-dashoffset: 150;
-  transition: 1s ease-in-out;
-}
-
-.btn:hover {
-  transition: 1s ease-in-out;
-  background: #4F95DA;
-}
-
-.btn:hover svg {
-  stroke-dashoffset: -480;
-}
-
-.btn span {
-  color: rgb(21, 228, 176);
-  font-size: 18px;
-  font-weight: 100;
-}
+  
  
-#addContent 
-{
-position: relative;
-}
- 
-#span1 
-{
-  position: relative;
-  top: -30px;
-  left: 750px;
-}
