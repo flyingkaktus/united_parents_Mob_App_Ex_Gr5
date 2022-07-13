@@ -211,6 +211,7 @@ a.forgot-password { font-size: 15px; }
   text-align: left;
 }
 
+
 .uni-logo {
   height: 110px;
   width: 210px;
@@ -408,3 +409,18 @@ input[type=number]::-webkit-outer-spin-button {
 .zip-result-card h1 { font-size: 18px; }
 .zip-result-card p { font-size: 16px; }
 }
+
+
+.child-Chat {
+  width: 80%;
+  float: left;
+  padding: 20px;
+  border: 2px solid rgba(19, 19, 19, 0.136);
+} 
+
+.child-Chatpartners {
+  width: 20%;
+  float: left;
+  padding: 20px;
+  border: 2px solid rgba(19, 19, 19, 0.136);
+} 

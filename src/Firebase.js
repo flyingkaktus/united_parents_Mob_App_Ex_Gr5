@@ -3,15 +3,20 @@ import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
+// Your web app's Firebase configuration
+
 const firebaseConfig = {
-    apiKey: "AIzaSyDPfu5SZdGj7ReQ2UbO2xyR4EgoJX6S8H4",
-    authDomain: "united-parents.firebaseapp.com",
-    databaseURL: "https://united-parents-default-rtdb.europe-west1.firebasedatabase.app/",
-    projectId: "united-parents",
-    storageBucket: "united-parents.appspot.com",
-    messagingSenderId: "214299041255",
-    appId: "1:214299041255:web:dd761d9b9c85e8214d7142"
+
+  apiKey: "AIzaSyBpNafl5F0Xxei3rysQ_u0Pfbud0l4hEz8",
+  authDomain: "united-parents-chat-function.firebaseapp.com",
+  databaseURL: "https://united-parents-chat-function-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "united-parents-chat-function",
+  storageBucket: "united-parents-chat-function.appspot.com",
+  messagingSenderId: "742675114491",
+  appId: "1:742675114491:web:f6a57800c364c8c4e8c35e"
+
 };
+
 
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
