@@ -6,13 +6,24 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "../Firebase";
+import Database from "../data/db";
 
 const userAuthContext = createContext();
 
 export function UserAuthContextProvider({ children }) {
   const [user, setUser] = useState("");
 
-  function register(email, password) {
+  function register(email, password, adminFlag = false) {
+  //  if(adminFlag == true) 
+  //  {
+      //write in extra table so we get that afterwards
+      console.log("do we even get here?");
+      var dbref = new Database;
+      dbref.setReferenceData("users");
+      console.log("do we even get here?");
+      dbref.writeUserData("" + email, adminFlag);
+      console.log("do we even get here?");
+    //}
     return createUserWithEmailAndPassword(auth, email, password);
   }
   function login(email, password) {

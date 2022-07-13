@@ -1,9 +1,39 @@
-import React from "react";
+import { getDocs } from "@firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Database from "../data/db";
 import { auth } from "../Firebase";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const [admin, setAdmin] = useState(false);
+  const user_email = auth.currentUser.email;
+  var adminFlag;
+  console.log("" + user_email);
+
+  var dbref = new Database;
+  dbref.setReferenceData("users");
+
+  const getUser = async () => 
+  {
+      const data = await getDocs(dbref.referenceData);
+      console.log(data);
+      //is current user a admin?
+      data.forEach((doc) => {
+        console.log("email: " + doc.data().user)
+          if(doc.data().user == user_email && user_email != null) 
+          {
+             adminFlag = doc.data().admin;
+             setAdmin(adminFlag);
+            console.log("Admin Flag: " + adminFlag);
+    
+          }
+          
+        });
+     // setContent(data.docs.map((doc) => ({title: doc.title, content: doc.content}) ))
+  };
+
+  getUser();
 
   const signout = () => {
     auth.signOut();
@@ -12,7 +42,26 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="icons">
+        
+        {admin && 
+        <>
         <div className="icons-container">
+          <Link to="/home">
+            <span className="material-icons">home</span>
+            <p>Startseite</p>
+          </Link>
+        </div>
+        <div className="icons-container">
+          <Link to="/help-finances">
+            <span className="material-icons">contact_support</span>
+            <p>Hilfe & Finanzen</p>
+          </Link>
+        </div>
+        </>
+        }
+        {!admin &&
+        <>
+                <div className="icons-container">
           <Link to="/home">
             <span className="material-icons">home</span>
             <p>Startseite</p>
@@ -53,7 +102,8 @@ function Sidebar() {
             <p>Einstellungen</p>
           </Link>
         </div>
-
+        </>
+}
         <div className="icons-container">
           <a href="#" onClick={signout}>
             <span className="material-icons">logout</span>

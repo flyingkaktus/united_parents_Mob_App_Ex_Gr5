@@ -1,7 +1,10 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Content from "../components/Content";
 import Database from "../data/db";
 import {getDatabase, ref, set, onValue} from "firebase/database"
+import { getDocs } from "@firebase/firestore";
+import {auth, databaseData} from "../Firebase"
+
 
 
 
@@ -9,62 +12,89 @@ import {getDatabase, ref, set, onValue} from "firebase/database"
 //Next steps: Implement User Login!
  function Home() {
     const [content, setContent] = useState([
-        { title: '', desc: ''},
+        { id: '', title: '', content: ''},
     ]);
+    const [admin, setAdmin] = useState(false);
+    const user_email = auth.currentUser.email;
+    var adminFlag;
+    console.log("" + user_email);
 
     var dbref = new Database;
+  dbref.setReferenceData("users");
 
-    const handleDataBaseEntries = () => 
+    const getUser = async () => 
     {
+        const data = await getDocs(dbref.referenceData);
+        console.log(data);
+        //is current user a admin?
+        data.forEach((doc) => {
+          console.log("email: " + doc.data().user)
+            if(doc.data().user == user_email && user_email != null) 
+            {
+               adminFlag = doc.data().admin;
+               setAdmin(adminFlag);
+              console.log("Admin Flag: " + adminFlag);
+      
+            }
+            
+          });
+       // setContent(data.docs.map((doc) => ({title: doc.title, content: doc.content}) ))
+    };
+
+        getUser();
+
+    dbref.setReferenceData("homeContent");       //setReferenceData collection depended by the  current context
+    const homeContentRef = dbref.referenceData;
+
+    const getContent = async () => 
+    {
+        const data = await getDocs(homeContentRef);
+        console.log(data);
         
-        //TODO:handle database entries so if you refresh the page,
-        //you see the added components!
-      //  dbref.pushToDataList();
-        for(var i = 0; i < 4; i++) 
-        {
-            dbref.setReferenceContent(i);       
-            var dbData = dbref.readContentData();
-            setContent([...content, {title: dbData.title, desc: dbData.description}]);
-        }
-    }
+        data.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            setContent(data.docs.map((doc) => ({id: doc.id, title: doc.data().title, content: doc.data().content}) ))
+          });
+       // setContent(data.docs.map((doc) => ({title: doc.title, content: doc.content}) ))
+    };
+
+    
+    useEffect(() => 
+    {
+        //retrieve home content data
+
+        getContent();
+       /// console.log("getContent() : " + homeContentRef);
+    }, []);
+
     
     const handleContentAdd = (index) => 
     {
+        
         let newTitle = prompt('What title do you want to write?');
         let description = prompt('What description do you want to write on the new component?');
-        dbref.setReferenceContent(index);
-        dbref.writeContentData(index, newTitle, description);
-        var dbData = dbref.readContentData();
-        setContent([...content, {title: dbData.title, desc: dbData.description}]);
+        //dbref.setReferenceContent(index);
+        dbref.writeContentData(index, newTitle, description);     
+       //window.location.reload();
     }
 
-    const handleContentRemove = (index) => 
-    {
-        const list = [...content];
-        list.splice(index, 1);
-        setContent(list);
-    }
+
         return (
             <div>  
-                {handleDataBaseEntries}
+                
                {content.map((Singlecontent, index) => (
                 <div>
                 <Content
                 title={Singlecontent.title}
-                desc={Singlecontent.desc}
-                idx={index}
+                desc={Singlecontent.content}
+                idx={Singlecontent.id}
                 />
                    
-                    {content.length - 1 === index && content.length < 4 && 
+                    {content.length - 1 === index && content.length < 4 && admin &&
                         (<button type = "button" onClick={() => handleContentAdd(index)}className="btn" id="addContent">
                         <span>Add Content</span>
                         </button>)
                         }
-                        {content.length > 1 && 
-                        (<button type = "button" onClick={() => handleContentRemove(index)}className="btn" id="addContent">
-                        <span className="span2">Remove Content</span>
-                        </button>)
-                        }   
                          </div>
                ))}            
                       

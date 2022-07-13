@@ -1,63 +1,109 @@
 import React from "react";
 import {getDatabase, ref, set, onValue} from "firebase/database"
+import {databaseData} from "../Firebase";
+import {collection, doc, setDoc, getDoc, deleteDoc} from "firebase/firestore";
+
 
 
 
 class Database 
 {
     constructor() {
-        this.db = getDatabase();
-        this.id = 0;
-        this.referenceContent = ref(this.db, 'content/');
-        this.data = "";
-        this.dataList = [];
+        this.db = databaseData;
+        this.id = this.getIndex();
+        this.referenceContent = this.getReferenceContent();
+        this.title = this.getTitle ();
+        this.referenceData = "";
     }  
 
-        setReferenceContent(id) 
+        getReferenceContent() 
         {
-            this.referenceContent = ref(this.db, 'content/' + id);
+            var referenceContent = doc(this.db, "homeContent", "content");
+            const docSnap =  getDoc(referenceContent);
+            if (docSnap.exists) {
+                console.log("Document data:", docSnap.data);
+                return docSnap.data;
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                return 0;
+              }       
+        }
+
+        getTitle() 
+        {
+            var referenceContent = doc(this.db, "homeContent", "title");
+            const docSnap =  getDoc(referenceContent);
+            if (docSnap.exists) {
+                console.log("Document data:", docSnap.data);
+                return docSnap.data;
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                return 0;
+              }  
+        }
+
+        getIndex() 
+        {
+            var referenceContent = doc(this.db, "homeContent", "index");
+            const docSnap =  getDoc(referenceContent);
+            if (docSnap.exists) {
+                console.log("Document data:", docSnap.data);
+                return docSnap.data;
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                return 0;
+              }  
         }
     
-        writeContentData(id, title, desc) 
+        updateContentData(index, title, desc) 
         {
-            set(this.referenceContent, 
+            
+            setDoc(doc(this.db, "homeContent", index), 
                 {
-                  titleContent: title,
-                  description: desc        
+                  title: title,
+                  content: desc,
+                  id: index  
+                });
+                
+        }
+
+        writeContentData(index, title, desc) 
+        {
+            
+            setDoc(doc(this.referenceData), 
+                {
+                  title: title,
+                  content: desc,
+                  id: index  
+                });
+                
+        }
+
+        writeUserData (users, adminFlag) 
+        {
+                        
+            setDoc(doc(this.referenceData), 
+                {
+                  user: users,
+                  admin: adminFlag,
                 });
         }
        
-        readContentData() 
-        {
-            var title;
-            var description;
-
-            onValue(this.referenceContent, (snapshot) =>
-            {
-                title = snapshot.child("titleContent").val();
-                description = snapshot.child("description").val();
-            })
-            return {title, description};
-        }
-
-        pushToDataList() 
+        deleteContentData(id) 
         {
 
-            onValue(ref(this.db, 'content/'), (snapshot) =>
-            {
-                snapshot.forEach((child)=> {
-                this.dataList.push(child.val());
-            })
-            })
-                   
-               // console.log(this.dataList, this.dataList.length); 
-            
+            deleteDoc(doc(this.db, "homeContent", id))
         }
 
-        getContentSize () 
+
+        setReferenceData(context) 
         {
-            return this.dataList.length;
+            this.referenceData = collection(this.db, context);
         }
+
 }
 
 export default Database;
